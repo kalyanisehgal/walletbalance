@@ -41,6 +41,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(null=False, blank=False, unique=True)
+    ethereum_address = models.CharField(max_length=42, blank=True, null=True, help_text='Ethereum wallet address')
     first_name = models.CharField(max_length=50, blank=False, null=False, default='Default first name')
     last_name = models.CharField(max_length=50, blank=False, null=False, default='Default last name')
     is_admin = models.BooleanField(default=False)

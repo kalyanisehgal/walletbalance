@@ -7,6 +7,7 @@ export default function Register() {
     const [loading, setLoading] = useState(false)
     const first_name = useRef()
     const last_name = useRef()
+    const ethereum_address = useRef()
     const email = useRef()
     const password = useRef()
     const password2 = useRef(undefined)
@@ -18,6 +19,7 @@ export default function Register() {
             first_name: first_name.current.value,
             last_name: last_name.current.value,
             email: email.current.value,
+            ethereum_address: ethereum_address.current.value,
             password: password.current.value,
             password2: password2.current.value
           };
@@ -41,19 +43,28 @@ export default function Register() {
             <h2>Register</h2>
             <form onSubmit={onSubmitForm}>
                 <div className="mb-3">
-                    <input type="text" placeholder='First Name' autoComplete='off' className='form-control' id='first_name' ref={first_name} />
+                    <input type="text" placeholder='First Name' autoComplete='off' className='form-control'
+                           id='first_name' ref={first_name}/>
                 </div>
                 <div className="mb-3">
-                    <input type="text" placeholder='Last Name' autoComplete='off' className='form-control' id='last_name' ref={last_name} />
+                    <input type="text" placeholder='Last Name' autoComplete='off' className='form-control'
+                           id='last_name' ref={last_name}/>
                 </div>
                 <div className="mb-3">
-                    <input type="email" placeholder='Email' autoComplete='off' className='form-control' id="email" ref={email} />
+                    <input type="email" placeholder='Email' autoComplete='off' className='form-control' id="email"
+                           ref={email}/>
                 </div>
                 <div className="mb-3">
-                    <input type="password" placeholder='Password' autoComplete='off' className='form-control' id="password" ref={password} />
+                    <input type="text" placeholder='Etherium Wallet Address' autoComplete='off' className='form-control'
+                           id='ethereum_address' ref={ethereum_address}/>
                 </div>
                 <div className="mb-3">
-                    <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control' id="passwordConfirmation" ref={password2} />
+                    <input type="password" placeholder='Password' autoComplete='off' className='form-control'
+                           id="password" ref={password}/>
+                </div>
+                <div className="mb-3">
+                    <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control'
+                           id="passwordConfirmation" ref={password2}/>
                 </div>
                 <div className="mb-3">
                     <button disabled={loading} className='btn btn-success' type="submit">Register</button>
