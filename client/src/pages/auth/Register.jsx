@@ -10,16 +10,20 @@ export default function Register() {
     const email = useRef()
     const password = useRef()
     const password2 = useRef(undefined)
+    /* HP Comment: For Ethereum Wallet */ 
+    const ethereum_wallet_address = useRef()
 
 
     async function onSubmitForm(event) {
         event.preventDefault()
+        /* HP Comment: Ethereum wallet address field added */
         const data = {
             first_name: first_name.current.value,
             last_name: last_name.current.value,
             email: email.current.value,
             password: password.current.value,
-            password2: password2.current.value
+            password2: password2.current.value,
+            ethereum_wallet_address : ethereum_wallet_address.current.value
           };
 
         setLoading(true)
@@ -54,6 +58,10 @@ export default function Register() {
                 </div>
                 <div className="mb-3">
                     <input type="password" placeholder='Confirm Password' autoComplete='off' className='form-control' id="passwordConfirmation" ref={password2} />
+                </div>  
+                {/* HP Comment: Ethereum wallet address field added */}
+                <div className="mb-3">
+                    <input type="text" placeholder='Ethereum wallet address' autoComplete='off' className='form-control' id='ethereum_wallet_address' ref={ethereum_wallet_address} />
                 </div>
                 <div className="mb-3">
                     <button disabled={loading} className='btn btn-success' type="submit">Register</button>

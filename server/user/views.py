@@ -4,7 +4,35 @@ from django.middleware import csrf
 from rest_framework import exceptions as rest_exceptions, response, decorators as rest_decorators, permissions as rest_permissions
 from rest_framework_simplejwt import tokens, views as jwt_views, serializers as jwt_serializers, exceptions as jwt_exceptions
 from user import serializers, models
+# HP Comment: Added required libraries/packages to fetch wallet balance
+from django.shortcuts import render
+from web3 import Web3
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+# HP Comment: Used alchemy API key to fetch the wallet balance
+ALCHEMY_URL = "https://eth-sepolia.g.alchemy.com/v2/XuInqctQLlAUAhdVSjdw_5ParHdsw10G"
+web3 = Web3(Web3.HTTPProvider(ALCHEMY_URL))
 
+# HP Comment: Get wallet balance logic, used web3 package to fetch the balance
+def get_wallet_balance(request):
+    
+    address = request.user.ethereum_wallet_address
+
+    # Check if the address is valid
+    if not web3.is_checksum_address(address):
+        return Response({'error': 'Invalid Ethereum address'}, status=400)
+
+    try:
+        # Fetch the balance in wei
+        balance_wei = web3.eth.get_balance(address)
+        
+        # Convert wei to ether
+        balance_eth = web3.from_wei(balance_wei, 'ether')
+
+        return str(balance_eth) + ' ETH'
+    except Exception as e:
+        return {'error': str(e)}
+    
 
 def get_user_tokens(user):
     refresh = tokens.RefreshToken.for_user(user)
@@ -125,6 +153,14 @@ def user(request):
         user = models.User.objects.get(id=request.user.id)
     except models.User.DoesNotExist:
         return response.Response(status_code=404)
-
+    
+    # HP Comment: Get balance
     serializer = serializers.UserSerializer(user)
-    return response.Response(serializer.data)
+    checkBalance = get_wallet_balance(request)
+    
+    # HP Comment: Update the user data
+    balance={'ethereum_wallet_balance':checkBalance}
+    balance.update(serializer.data)
+
+    # HP Comment: Return user data to the react view
+    return response.Response(balance)
